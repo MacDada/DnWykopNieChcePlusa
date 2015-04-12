@@ -10,3 +10,5 @@ https://chrome.google.com/webstore/detail/wykopniechceplusa/filcomihceheookbklap
 Dodane na masterze
 
 Dodane na zmianach 1
+
+Dodane na zmianach 2
