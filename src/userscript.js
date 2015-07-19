@@ -31,25 +31,29 @@
         function removeVoters() {
             var removedCount = 0;
 
-            var $votersOnVotersLists = $('#activities-stream .votLiC a')
+            // lista plusujących pod wpisami/komentarzami
+            var $votersOnVotersLists = $('#itemsStream .voters-list a')
                 .filter(votersOnVotersListsFilterSelector);
-
-            //$votersOnVotersLists.css('border', '1px solid yellow');
 
             $votersOnVotersLists.each(function () {
                 var $voter = $(this);
 
                 /**
-                 * Zmniejszamy liczbę plusów przy komentarzu
+                 * Zmniejszamy liczbę plusów przy wpisie/komentarzu
                  */
-                var $votesResult = $voter.parents('blockquote').find('.votC span');
+                var $votesResult = $voter.parents('.dC').find('.vC span');
                 var newVotesResult = parseInt($votesResult.text()) - 1;
-                $votesResult.text(0 === newVotesResult ? 0 : '+' + newVotesResult);
+                $votesResult.text(newVotesResult ? '+' + newVotesResult : 0);
 
                 /**
                  * Usuwamy pseudonim z listy głosujących
                  */
-                var $voterList = $voter.parent('.votLiC');
+                var $voterList = $voter.parent('.voters-list');
+
+                var separator = $voter.get(0).nextSibling;
+                if (separator && ', ' === separator.nodeValue) {
+                    separator.remove();
+                }
 
                 $voter.remove();
 
@@ -72,6 +76,7 @@
         }
 
         votersOnVotersListsFilterSelector = createFilterVotersSelector(voters);
+        console.log('dnWNCP:votersOnVotersListsFilterSelector', votersOnVotersListsFilterSelector);
 
         /**
          * Usuwamy gości na starcie
@@ -82,6 +87,8 @@
          * Usuwamy gości po ajaksach
          */
         $(w.document).ajaxComplete(function () {
+            // todo: ajax przeładowuje całą listę, więc trzeba to uwzględnić,
+            //       bo przy podwójnym usuwaniu zaniżamy liczbę głosów
             setTimeout(removeVoters, 100);
         });
     }; // eo dnWykopNieChcePlusaInit()
