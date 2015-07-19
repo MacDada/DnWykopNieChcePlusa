@@ -1,6 +1,6 @@
 {
 	"name": "WykopNieChcePlusa",
-	"version": "0.8.1",
+	"version": "0.8.2",
 	"manifest_version": 2,
 	"description": "Ukrywaj plusy od niechcianych osób na Mikroblogu Wykop.pl",
     "homepage_url": "https://github.com/MacDada",
