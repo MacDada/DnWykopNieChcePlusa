@@ -1,6 +1,6 @@
-(function() {
+(function () {
 
-    var dnWykopNieChcePlusaInit = function(w, $, undefined) {
+    var dnWykopNieChcePlusaInit = function (w, $) {
         var voters = [];
 
         try {
@@ -11,10 +11,10 @@
             }
         }
 
-        var votersOnVotersListsFilter = (function(voters) {
+        var votersOnVotersListsFilter = (function (voters) {
             var r = '';
 
-            $.each(voters, function() {
+            $.each(voters, function () {
                // usuwamy małpkę z początku
                r += ':contains("' + this.slice(1) + '"),';
             });
@@ -23,19 +23,19 @@
             return r.substring(0, r.length - 1);
         })(voters);
 
-    //    console.log(votersOnVotersListsFilter);
+        //console.log(votersOnVotersListsFilter);
 
-//        console.log('page context voters', localStorage.getItem('dnWNCPvoters'));
+        //console.log('page context voters', localStorage.getItem('dnWNCPvoters'));
 
-        var removeVoters = function() {
+        var removeVoters = function () {
             var removedCount = parseInt(w.localStorage.getItem('dnWNCPremoved')) || 0;
 
             var $votersOnVotersLists = $('#activities-stream .votLiC a')
-                    .filter(votersOnVotersListsFilter);
+                .filter(votersOnVotersListsFilter);
 
-        //    $votersOnVotersLists.css('border', '1px solid yellow');
+            //$votersOnVotersLists.css('border', '1px solid yellow');
 
-            $votersOnVotersLists.each(function() {
+            $votersOnVotersLists.each(function () {
                 var $voter = $(this);
 
                 /**
@@ -71,7 +71,7 @@
         /**
          * Usuwamy gości po ajaksach
          */
-        $(w.document).ajaxComplete(function() {
+        $(w.document).ajaxComplete(function () {
             setTimeout(removeVoters, 100);
         });
     }; // eo dnWykopNieChcePlusaInit()
@@ -88,7 +88,7 @@
 
 
     // zwracamy zapisanych userów na żądanie zakładki ustawień
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.voters) {
             var voters = localStorage.getItem('dnWNCPvoters') || '';
 

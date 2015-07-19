@@ -1,11 +1,10 @@
-chrome.tabs.getSelected(null, function(tab) {
-
+chrome.tabs.getSelected(null, function (tab) {
     var $usernames = $('#usernames');
     var $result = $('#result');
 
     // prosimy userscript o wczytanie zapisanych userów do zblokowania
-    chrome.tabs.sendMessage(tab.id, { voters: true }, function(response) {
-        console.log('popup.js: voters', response);
+    chrome.tabs.sendMessage(tab.id, { voters: true }, function (response) {
+        console.log('popup.js: currently saved voters response', response);
 
         $usernames.val(response.voters);
 
@@ -13,12 +12,12 @@ chrome.tabs.getSelected(null, function(tab) {
     });
 
     // zapisujemy dane przy pomocy userscripta
-    $('form').submit(function(e) {
+    $('form').submit(function (e) {
         e.preventDefault();
 
-        chrome.tabs.sendMessage(tab.id, { newVoters: $usernames.val() }, function(response) {
+        chrome.tabs.sendMessage(tab.id, { newVoters: $usernames.val() }, function (response) {
             if (response.newVotersSaved) {
-                console.log('zapisano!');
+                console.log('popup.js: zapisano nową listę do zblokowania!');
                 $result.text('Zapisano!');
             } else {
                 console.error('popup.js: unknown response', response);
@@ -26,5 +25,4 @@ chrome.tabs.getSelected(null, function(tab) {
             }
         });
     });
-
 });
