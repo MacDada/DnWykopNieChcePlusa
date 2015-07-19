@@ -8,6 +8,7 @@ chrome.tabs.getSelected(null, function (tab) {
 
         $usernames.val(response.voters);
 
+        // todo: podpowiadanie z jakiegoś powodu wybucha
         $usernames.suggest('https://www.wykop.pl/ajax/suggest/', { natural: true });
     });
 

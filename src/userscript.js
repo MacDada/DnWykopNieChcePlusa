@@ -1,37 +1,38 @@
 (function () {
 
     var dnWykopNieChcePlusaInit = function (w, $) {
-        var voters = [];
+        var voters;
+        var votersOnVotersListsFilterSelector;
 
-        try {
-            voters = w.localStorage.getItem('dnWNCPvoters').match(/(@\w+)/g);
-        } finally {
-            if (!$.isArray(voters) || 0 === voters.length) {
-                return false;
+        function loadVotersArray() {
+            try {
+                voters = w.localStorage.getItem('dnWNCPvoters').match(/(@\w+)/g);
+            } finally {
+                if (!$.isArray(voters) || 0 === voters.length) {
+                    return false;
+                }
             }
-        }
 
-        var votersOnVotersListsFilter = (function (voters) {
-            var r = '';
+            return voters;
+        };
+
+        function createFilterVotersSelector(voters) {
+            var selector = '';
 
             $.each(voters, function () {
-               // usuwamy małpkę z początku
-               r += ':contains("' + this.slice(1) + '"),';
+               // slicem usuwamy małpkę z początku
+               selector += ':contains("' + this.slice(1) + '"),';
             });
 
             // wywalamy ostatni zbędny przecinek
-            return r.substring(0, r.length - 1);
-        })(voters);
+            return selector.substring(0, selector.length - 1);
+        };
 
-        //console.log(votersOnVotersListsFilter);
-
-        //console.log('page context voters', localStorage.getItem('dnWNCPvoters'));
-
-        var removeVoters = function () {
-            var removedCount = parseInt(w.localStorage.getItem('dnWNCPremoved')) || 0;
+        function removeVoters() {
+            var removedCount = 0;
 
             var $votersOnVotersLists = $('#activities-stream .votLiC a')
-                .filter(votersOnVotersListsFilter);
+                .filter(votersOnVotersListsFilterSelector);
 
             //$votersOnVotersLists.css('border', '1px solid yellow');
 
@@ -60,8 +61,17 @@
                 removedCount++;
             });
 
-            w.localStorage.setItem('dnWNCPremoved', removedCount);
+            var savedRemovedCount = parseInt(w.localStorage.getItem('dnWNCPremoved')) || 0;
+            w.localStorage.setItem('dnWNCPremoved', savedRemovedCount + removedCount);
         };
+
+        voters = loadVotersArray();
+
+        if (!voters) {
+            return false;
+        }
+
+        votersOnVotersListsFilterSelector = createFilterVotersSelector(voters);
 
         /**
          * Usuwamy gości na starcie
